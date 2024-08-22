@@ -22,6 +22,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "4a709a94-27b9-470e-9435-2deabc8bf9e0"
+      }
+    },
+    "owner": "usmancmd"
   }
 }
