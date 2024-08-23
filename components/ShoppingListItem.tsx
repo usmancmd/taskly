@@ -1,13 +1,28 @@
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+	Alert,
+	Pressable,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
+} from "react-native";
 import { theme } from "../theme";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import Entypo from "@expo/vector-icons/Entypo";
 
 type Props = {
 	name: string;
 	isCompleted?: boolean;
+	onDelete: () => void;
+	onToggleComplete: () => void;
 };
 
-export function ShoppingListItem({ name, isCompleted }: Props) {
+export function ShoppingListItem({
+	name,
+	isCompleted,
+	onDelete,
+	onToggleComplete,
+}: Props) {
 	const handleDelete = () => {
 		Alert.alert(
 			`Are you sure you want to delete ${name}?`,
@@ -15,7 +30,7 @@ export function ShoppingListItem({ name, isCompleted }: Props) {
 			[
 				{
 					text: "Yes",
-					onPress: () => console.log("ok, deleting..."),
+					onPress: () => onDelete(),
 					style: "destructive",
 				},
 				{
@@ -27,18 +42,27 @@ export function ShoppingListItem({ name, isCompleted }: Props) {
 	};
 
 	return (
-		<View
+		<Pressable
 			style={[
 				styles.itemContainer,
 				isCompleted ? styles.isCompletedContainer : undefined,
-			]}>
-			<Text
-				style={[
-					styles.itemText,
-					isCompleted ? styles.completedText : undefined,
-				]}>
-				{name}
-			</Text>
+			]}
+			onPress={onToggleComplete}>
+			<View style={styles.row}>
+				<Entypo
+					name={isCompleted ? "check" : "circle"}
+					size={24}
+					color={isCompleted ? theme.colorGrey : theme.colorCerulean}
+				/>
+				<Text
+					style={[
+						styles.itemText,
+						isCompleted ? styles.completedText : undefined,
+					]}
+					numberOfLines={1}>
+					{name}
+				</Text>
+			</View>
 			<TouchableOpacity activeOpacity={0.5} onPress={handleDelete}>
 				<AntDesign
 					name="closecircle"
@@ -46,7 +70,7 @@ export function ShoppingListItem({ name, isCompleted }: Props) {
 					color={isCompleted ? theme.colorGrey : theme.colorRed}
 				/>
 			</TouchableOpacity>
-		</View>
+		</Pressable>
 	);
 }
 
@@ -67,6 +91,7 @@ const styles = StyleSheet.create({
 	itemText: {
 		fontSize: 18,
 		fontWeight: "200",
+		flex: 1,
 	},
 	completedText: {
 		textDecorationLine: "line-through",
@@ -85,5 +110,10 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 		textTransform: "uppercase",
 		letterSpacing: 1,
+	},
+	row: {
+		flexDirection: "row",
+		gap: 8,
+		flex: 1,
 	},
 });
