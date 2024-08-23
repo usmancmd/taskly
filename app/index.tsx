@@ -5,6 +5,7 @@ import {
 	FlatList,
 	View,
 	Text,
+	LayoutAnimation,
 } from "react-native";
 import { ShoppingListItem } from "../components/ShoppingListItem";
 import { theme } from "../theme";
@@ -44,6 +45,7 @@ export default function App() {
 				},
 				...shoppingList,
 			];
+			LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 			setShoppingList(newShoppingList);
 			saveToStorage(storageKey, newShoppingList);
 			setValue("");
@@ -53,6 +55,7 @@ export default function App() {
 	const handleDelete = (id: string) => {
 		const newShoppingList = shoppingList.filter((item) => item.id !== id);
 		saveToStorage(storageKey, newShoppingList);
+		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 		setShoppingList(newShoppingList);
 	};
 
@@ -70,6 +73,7 @@ export default function App() {
 			return item;
 		});
 		saveToStorage(storageKey, newShoppingList);
+		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 		setShoppingList(newShoppingList);
 	};
 
