@@ -5,17 +5,23 @@ import {
 	TouchableOpacity,
 	Alert,
 	ActivityIndicator,
+	useWindowDimensions,
 } from "react-native";
 import { theme } from "../../theme";
 import { registerForPushNotificationsAsync } from "../../utils/registerForPushNotificationsAsync";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Duration, intervalToDuration, isBefore } from "date-fns";
 import { TimeSegment } from "../../components/TimeSegment";
 import { getFromStorage, saveToStorage } from "../../utils/storage";
+import * as Haptics from "expo-haptics";
+import ConfettiCannon from "react-native-confetti-cannon";
 
-const frequency = 10 * 1000;
+// 10 seconds
+// const frequency = 10 * 1000;
+// two weeks
+const frequency = 14 * 24 * 60 * 60 * 1000;
 
 export const countdownStorageKey = "taskly-countdown";
 
@@ -30,6 +36,8 @@ type CountdownStatus = {
 };
 
 export default function CounterScreen() {
+	const { width } = useWindowDimensions();
+	const confettiRef = useRef<any>();
 	const [isLoading, setIsLoading] = useState(true);
 	const [countdownState, setCountdownState] =
 		useState<PersistedCountdownState>();
@@ -75,6 +83,7 @@ export default function CounterScreen() {
 	}, [lastCompletedTimestamp]);
 
 	const scheduleNotification = async () => {
+		Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
 		let pushNotificationId;
 		const result = await registerForPushNotificationsAsync();
 		if (result === "granted") {
@@ -157,8 +166,15 @@ export default function CounterScreen() {
 				style={styles.button}
 				activeOpacity={0.8}
 				onPress={scheduleNotification}>
-				<Text style={styles.buttonText}>I've done the thing!</Text>
+				<Text style={styles.buttonText}>I've washed the car!</Text>
 			</TouchableOpacity>
+			<ConfettiCannon
+				ref={confettiRef}
+				count={50}
+				origin={{ x: width / 2, y: -20 }}
+				autoStart={false}
+				fadeOut
+			/>
 		</View>
 	);
 }

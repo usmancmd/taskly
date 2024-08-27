@@ -25,7 +25,7 @@ export default function HistoryScreen() {
 			data={countdownState?.completedAtTimestamp}
 			ListEmptyComponent={
 				<View style={styles.listEmptyContainer}>
-					<Text>Your shopping list is empty</Text>
+					<Text></Text>
 				</View>
 			}
 			renderItem={({ item }) => (
